@@ -1,0 +1,69 @@
+<div id="settings_plugin_maintenance_reminder">
+	<h3>Maintenance Reminder Settings</h3>
+
+	<form class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label">Count Failed Prints</label>
+			<div class="controls">
+				<label class="checkbox">
+					<input type="checkbox"
+						   data-bind="checked: pluginSettings.count_failed">
+					<span class="help-inline">Count failed prints toward maintenance</span>
+				</label>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Count Cancelled Prints</label>
+			<div class="controls">
+				<label class="checkbox">
+					<input type="checkbox"
+						   data-bind="checked: pluginSettings.count_cancelled">
+					<span class="help-inline">Count cancelled prints toward maintenance</span>
+				</label>
+			</div>
+		</div>
+		
+		<table class="table table-striped">
+			<thead>
+				<tr><th style="width: 200px">Message</th><th>Count</th><th>Alert</th><th>Delete</th><th>Reset</th><th>Increment</th></tr>
+			</thead>
+			<tbody data-bind="foreach: pluginSettings.reminders">
+				<tr data-bind="css: { 'maintenance-alert': $parent.isAlert($data) }">
+					<td>
+						<input class="input-block-level"
+					    data-bind="value: message" />
+					</td>
+					<td>
+					<span data-bind="text: count"></span>/<input data-bind="value: interval" style="width: 50px; display: inline-block;"/> prints
+					</td>
+					<td data-bind="text: $parent.isAlert($data) ? 'yes' : 'no' ">
+					</td>
+					<td>
+						<button class="btn btn-danger btn-sm"
+								data-bind="click: $parent.removeReminder">
+							Delete
+						</button>
+					</td>
+					<td>
+						<button class="btn btn-warning btn-sm"
+								data-bind="click: $parent.resetReminder">
+							Reset
+						</button>
+					</td>
+					<td>
+						<button class="btn btn-success btn-sm"
+								data-bind="click: $parent.incrementReminder">
+							Increment
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<button class="btn btn-primary"
+				data-bind="click: $root.addReminder">
+			Add Reminder
+		</button>
+	</form>
+</div>

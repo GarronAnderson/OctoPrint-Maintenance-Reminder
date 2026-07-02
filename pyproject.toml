@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "OctoPrint Maintenance Reminder"
+version = "0.1.0"
+description = "maintenance notifications that track your print count"
+authors = [
+    {name = "Garron Anderson", email = "garronanderson4321@gmail.com"}
+]
+readme = {file = "README.md", content-type = "text/markdown"}
+dynamic = [
+    "license"
+]
+
+requires-python = ">=3.7, <4"
+
+# any additional requirements (besides OctoPrint) should be listed here
+dependencies = []
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = [
+    "octoprint_maintenance_reminder",
+    "octoprint_maintenance_reminder.*"
+]
+
+[project.entry-points."octoprint.plugin"]
+maintenance_reminder = "octoprint_maintenance_reminder"
+
+[project.urls]
+Homepage = "https://github.com/GarronAnderson/OctoPrint-Maintenance-Reminder"
+
+[project.optional-dependencies]
+develop = [
+    "go-task-bin"
+]

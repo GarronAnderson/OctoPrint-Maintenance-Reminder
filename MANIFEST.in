@@ -1,0 +1,4 @@
+include README.md
+recursive-include octoprint_maintenance_reminder/templates *
+recursive-include octoprint_maintenance_reminder/translations *
+recursive-include octoprint_maintenance_reminder/static *

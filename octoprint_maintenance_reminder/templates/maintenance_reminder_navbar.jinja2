@@ -1,0 +1,18 @@
+<a class="pull-right"
+   href="#"
+   id="navbar_maintenance_reminder"
+   data-bind="css: {
+       'text-danger': needsMaintenance(),
+       'text-success': !needsMaintenance()
+   }">
+
+	<span class="fa-layers fa-fw">
+        <i class="fas fa-screwdriver-wrench"></i>
+        <i class="fas fa-circle"
+           data-fa-transform="shrink-6 right-6 up-3"
+		   style="color: #ff0000"
+           data-bind="visible: needsMaintenance"></i>
+    </span>
+
+    <span data-bind="text: needsMaintenance() ? 'Maintenance Required' : 'No Maintenance Needed', style: { color: needsMaintenance() ? 'red' : '' }"></span>
+</a>
