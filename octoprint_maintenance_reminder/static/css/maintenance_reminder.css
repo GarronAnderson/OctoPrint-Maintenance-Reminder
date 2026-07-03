@@ -1,3 +1,12 @@
 .maintenance-alert td {
     background-color: #f8d7da !important;
 }
+
+.maintenance-popover {
+    max-width: 500px;
+    width: 500px;
+}
+
+.maintenance-popover .bar {
+    transition: width 1s ease;
+}
