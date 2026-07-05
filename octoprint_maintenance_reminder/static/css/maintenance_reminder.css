@@ -10,3 +10,7 @@
 .maintenance-popover .bar {
     transition: width 1s ease;
 }
+
+.maintenance-settings .bar {
+    transition: width 1s ease;
+}

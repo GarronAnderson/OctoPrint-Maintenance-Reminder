@@ -1,0 +1,63 @@
+<div
+    id="modal_maintenance_reminder"
+    class="modal hide fade"
+>
+    <div class="modal-header">
+        <a
+            href="#"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+            title="Cancel"
+        >
+            &times;
+        </a>
+        <h3>Maintenance Reccommended</h3>
+    </div>
+	
+    <div class="modal-body">
+	<table class="table table-striped">
+			<thead>
+				<tr><th style="width: 200px">Message</th><th>Count</th><th>Reset</th></tr>
+			</thead>
+			<tbody data-bind="foreach: pluginSettings.reminders">
+				<tr data-bind="css: { 'maintenance-alert': $parent.isAlert($data) }">
+					<td>
+						<input class="input-block-level"
+					    data-bind="value: message" />
+					</td>
+					<td>
+					<span data-bind="text: count"></span>/<input data-bind="value: interval" style="width: 50px; display: inline-block;"/> prints
+					</td>
+					<td>
+						<button class="btn btn-success btn-mini"
+								data-bind="click: $parent.resetReminder">
+							<i class="fa fa-check-square"></i> Mark Complete
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="modal-footer">
+		<button href="#" class="btn" data-dismiss="modal">
+			Cancel Print
+		</button>
+
+		<button href="#" class="btn btn-danger" data-bind="click: continuePrint">
+			Ignore Maintenance
+		</button>
+		
+		<button
+			href="#"
+			class="btn"
+			data-bind="
+				click: continuePrint,
+				enable: !needsMaintenance(),
+				css: { 'btn-primary': !needsMaintenance() }
+			">
+			Continue Print
+		</button>
+	</div>
+</div>

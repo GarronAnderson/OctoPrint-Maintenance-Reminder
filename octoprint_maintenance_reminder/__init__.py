@@ -24,10 +24,11 @@ class MaintenanceReminderPlugin(
                 {"message":"Wash PEI Sheet", "interval": 10, "count": 0},
                 {"message":"Lubricate Fittings", "interval": 600, "count": 0},
             ],
-            "ntfy_enabled": False,
-            "ntfy_url": "http://ntfy.sh/octoprint_maintenance",
             "count_failed": True,
             "count_cancelled": True,
+            "show_navbar_message": True,
+            "warning_threshold": 50,
+            "danger_threshold": 80,
         }
         # reminders is a list of dicts with (message, interval (in prints), (current) count)
 
@@ -50,7 +51,7 @@ class MaintenanceReminderPlugin(
         # for details.
         return {
             "maintenance_reminder": {
-                "displayName": "Maintenance Reminder Plugin",
+                "displayName": "Maintenance Reminder",
                 "displayVersion": self._plugin_version,
                 # version check: github repository
                 "type": "github_release",
@@ -86,7 +87,15 @@ class MaintenanceReminderPlugin(
                 }
             )
 
-    # API for JS comms
+    # Templates
+    def get_template_configs(self):
+        return [
+            dict(type="settings", custom_bindings=True),
+            dict(type="navbar", custom_bindings=True),
+            dict(type="generic", template="maintenance_reminder_modal.jinja2")
+        ]
+    
+    # API for testing, mostly
     def get_api_commands(self):
         return {"reset": ["message"], "increment": []}
 
@@ -122,8 +131,8 @@ class MaintenanceReminderPlugin(
 # If you want your plugin to be registered within OctoPrint under a different name than what you defined in setup.py
 # ("OctoPrint-PluginSkeleton"), you may define that here. Same goes for the other metadata derived from setup.py that
 # can be overwritten via __plugin_xyz__ control properties. See the documentation for that.
-__plugin_name__ = "OctoPrint-Maintenance-Reminder"
-
+__plugin_name__ = "Maintenance Reminder"
+__author__ = "Garron Anderson <garronanderson4321@gmail.com>"
 
 # Set the Python version your plugin is compatible with below. Recommended is Python 3 only for all new plugins.
 # OctoPrint 1.4.0 - 1.7.x run under both Python 3 and the end-of-life Python 2.

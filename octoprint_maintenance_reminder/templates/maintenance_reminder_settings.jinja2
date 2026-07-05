@@ -1,61 +1,48 @@
-<div id="settings_plugin_maintenance_reminder">
+<div id="settings_plugin_maintenance_reminder" class="maintenance-settings">
 	<h3>Maintenance Reminder Settings</h3>
-
 	<form class="form-horizontal">
-		<div class="control-group">
-			<label class="control-label">Count Failed Prints</label>
-			<div class="controls">
-				<label class="checkbox">
-					<input type="checkbox"
-						   data-bind="checked: pluginSettings.count_failed">
-					<span class="help-inline">Count failed prints toward maintenance</span>
-				</label>
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label class="control-label">Count Cancelled Prints</label>
-			<div class="controls">
-				<label class="checkbox">
-					<input type="checkbox"
-						   data-bind="checked: pluginSettings.count_cancelled">
-					<span class="help-inline">Count cancelled prints toward maintenance</span>
-				</label>
-			</div>
-		</div>
-		
-		<table class="table table-striped">
-			<thead>
-				<tr><th style="width: 200px">Message</th><th>Count</th><th>Alert</th><th>Delete</th><th>Reset</th><th>Increment</th></tr>
-			</thead>
+	<div class="tabbable"> <!-- Only required for left/right tabs -->
+	  <ul class="nav nav-tabs">
+		<li class="active"><a href="#tab_reminders" data-toggle="tab">Reminders</a></li>
+		<li><a href="#tab_settings" data-toggle="tab">Settings</a></li>
+	  </ul>
+	  <div class="tab-content">
+		<div class="tab-pane active" id="tab_reminders">
+		  <table class="table table-striped">
 			<tbody data-bind="foreach: pluginSettings.reminders">
 				<tr data-bind="css: { 'maintenance-alert': $parent.isAlert($data) }">
 					<td>
 						<input class="input-block-level"
-					    data-bind="value: message" />
+					    data-bind="value: message" style="width:250px"/>
 					</td>
-					<td>
-					<span data-bind="text: count"></span>/<input data-bind="value: interval" style="width: 50px; display: inline-block;"/> prints
+					<td style="text-align:right">
+					<span data-bind="text: count"></span> / <input data-bind="value: interval" style="width: 25px; display: inline-block;"/> prints
+					<button class="btn btn-danger btn-mini"
+							data-bind="click: $parent.removeReminder">
+							<i class="fa fa-trash"></i> Delete
+					</button>
+					<button class="btn btn-success btn-mini"
+							data-bind="click: $parent.resetReminder">
+							<i class="fa fa-check-square"></i> Mark Complete
+					</button>
+					<button class="btn btn-primary btn-mini"
+							data-bind="click: $parent.incrementReminder">
+							<i class="fa fa-plus"></i> Increment
+					</button>
 					</td>
-					<td data-bind="text: $parent.isAlert($data) ? 'yes' : 'no' ">
-					</td>
-					<td>
-						<button class="btn btn-danger btn-sm"
-								data-bind="click: $parent.removeReminder">
-							Delete
-						</button>
-					</td>
-					<td>
-						<button class="btn btn-warning btn-sm"
-								data-bind="click: $parent.resetReminder">
-							Reset
-						</button>
-					</td>
-					<td>
-						<button class="btn btn-success btn-sm"
-								data-bind="click: $parent.incrementReminder">
-							Increment
-						</button>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="progress">
+							<div
+								class="bar"
+								data-bind="
+									css: $parent.barClass($data),
+									style: { width: $parent.percentage($data) + '%' },
+									text: $parent.percentage($data) + '%'
+								">
+							</div>
+						</div>
 					</td>
 				</tr>
 			</tbody>
@@ -65,5 +52,66 @@
 				data-bind="click: $root.addReminder">
 			Add Reminder
 		</button>
+		</div>
+		<div class="tab-pane" id="tab_settings">
+		  <div class="control-group">
+			<label class="control-label">Count Failed Prints</label>
+			<div class="controls">
+				<label class="checkbox">
+					<input type="checkbox"
+						   data-bind="checked: pluginSettings.count_failed">
+					<span class="help-inline">Count failed prints toward maintenance</span>
+				</label>
+			</div>
+		
+			<label class="control-label">Count Cancelled Prints</label>
+			<div class="controls">
+				<label class="checkbox">
+					<input type="checkbox"
+						   data-bind="checked: pluginSettings.count_cancelled">
+					<span class="help-inline">Count cancelled prints toward maintenance</span>
+				</label>
+			</div>
+			
+			<hr />
+			
+			<label class="control-label">Show Navbar Message</label>
+			<div class="controls">
+				<label class="checkbox">
+					<input type="checkbox"
+						   data-bind="checked: pluginSettings.show_navbar_message">
+					<span class="help-inline">Show a message with maintenance status on the navbar</span>
+				</label>
+			</div>
+			
+			<label class="control-label">Warning Threshold</label>
+			<div class="controls">
+				<label class="text">
+					<input type="text"
+						   data-bind="textInput: pluginSettings.warning_threshold">
+					<div style="margin-top: 0.25em">
+						<small>
+							Threshold (in percent) to mark a reminder as orange
+						</small>
+					</div>
+				</label>
+			</div>
+			
+			<label class="control-label">Danger Threshold</label>
+			<div class="controls">
+				<label class="text">
+					<input type="text"
+						   data-bind="textInput: pluginSettings.danger_threshold">
+					<div style="margin-top: 0.25em">
+						<small>
+							Threshold (in percent) to mark a reminder as red
+						</small>
+					</div>
+				</label>
+			</div>
+		</div>
+		</div>
+	  </div>
+	</div>		
 	</form>
 </div>
