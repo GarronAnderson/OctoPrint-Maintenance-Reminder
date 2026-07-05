@@ -22,10 +22,6 @@ $(function () {
                 self.settingsViewModel.settings.plugins.maintenance_reminder;
         };
 
-        self.onStartup = function () {
-            self.monkeyPatchOctoprintUI();
-        };
-
         self.onDataUpdaterPluginMessage = function (plugin, data) {
             if (plugin !== "maintenance_reminder") {
                 return;
@@ -44,54 +40,32 @@ $(function () {
         // === PRINT HANDLERS ===
         // This works by intercepting the OctoPrint call and patching it, like octoprint-spoolman does.
         // You can then reset reminders and cancel or continue prints.
-
+		
         self.pendingPrint = false;
-
-        self.beforePrint = function (callback) {
-            callback = callback || self.originalPrint;
-
-            if (!self.needsMaintenance()) {
-                callback();
+        self.onBeforePrintStart = function (callback, data) {
+			if (!self.needsMaintenance()) {
                 return;
             }
 
             self.pendingPrint = callback;
             if (self.needsMaintenance()) {
                 $("#modal_maintenance_reminder").modal("show");
+				return false;
             }
-        };
-
+		};
+		
         self.continuePrint = function () {
             $("#modal_maintenance_reminder").modal("hide");
 
             if (self.pendingPrint) {
                 self.pendingPrint();
-                self.pendingPrint = null;
+                self.pendingPrint = false;
             }
         };
 
         self.cancelPrint = function () {
-            self.pendingPrint = null;
+            self.pendingPrint = false;
             $("#modal_maintenance_reminder").modal("hide");
-        };
-
-        self.monkeyPatchOctoprintUI = function () {
-            self.originalPrint = self.printerStateViewModel.print;
-            self.originalLoadFile = self.filesViewModel.loadFile;
-
-            self.printerStateViewModel.print = function () {
-                self.beforePrint();
-            };
-
-            self.filesViewModel.loadFile = function (path, printAfterLoad) {
-                if (!printAfterLoad) {
-                    return self.originalLoadFile(path, false);
-                }
-
-                self.beforePrint(function () {
-                    self.originalLoadFile(path, true);
-                });
-            };
         };
 
         // === REMINDERS ===

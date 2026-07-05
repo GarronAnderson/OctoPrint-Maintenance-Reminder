@@ -13,8 +13,12 @@ class MaintenanceReminderPlugin(
     octoprint.plugin.TemplatePlugin,
     octoprint.plugin.EventHandlerPlugin,
     octoprint.plugin.StartupPlugin,
-    octoprint.plugin.SimpleApiPlugin,
 ):
+    
+    def __init__(self):
+        # Used for ignoring marks of failed prints after a user cancels
+        self.last_event = None
+        self.last_time = None
 
     ##~~ SettingsPlugin mixin
 
@@ -73,7 +77,18 @@ class MaintenanceReminderPlugin(
         count_failed = self._settings.get(["count_failed"])
         count_cancelled = self._settings.get(["count_cancelled"])
         
+        if (
+            event == octoprint.events.Events.PRINT_FAILED
+            and self.last_event == octoprint.events.Events.PRINT_CANCELLED
+            and payload.get("time") == self.last_time
+        ):
+            # Cancelled prints increment the counter twice without this.
+            return
+        
         if (event == octoprint.events.Events.PRINT_DONE) or (event == octoprint.events.Events.PRINT_CANCELLED and count_cancelled) or (event == octoprint.events.Events.PRINT_FAILED and count_failed):
+            self.last_event = event
+            self.last_time = payload.get("time")
+            
             reminders = self._settings.get(["reminders"])
             for reminder in reminders:
                 reminder["count"] += 1
@@ -94,39 +109,9 @@ class MaintenanceReminderPlugin(
             dict(type="navbar", custom_bindings=True),
             dict(type="generic", template="maintenance_reminder_modal.jinja2")
         ]
-    
-    # API for testing, mostly
-    def get_api_commands(self):
-        return {"reset": ["message"], "increment": []}
-
-    def on_api_get(self, request):
-        reminders = self._settings.get(["reminders"])
-        return jsonify(reminders)
-
-    def on_api_command(self, command, data):
-        if command == "reset":
-            to_reset = data['message']
-            reminders = self._settings.get(["reminders"])
-            for reminder in reminders:
-                if reminder["message"] == to_reset:
-                    reminder['count'] = 0
-            self._settings.set(["reminders"], reminders)
-
-        if command == "increment":
-            reminders = self._settings.get(["reminders"])
-            for reminder in reminders:
-                reminder["count"] += 1
-
-            self._settings.set(["reminders"], reminders)
-            self._logger.info(f"reminders now: {reminders}")
         
-        self._plugin_manager.send_plugin_message(
-            self._identifier,
-            {
-                "type": "reminders_updated",
-                "reminders": reminders
-            }
-        )
+    def is_template_autoescaped(self):
+        return True
 
 # If you want your plugin to be registered within OctoPrint under a different name than what you defined in setup.py
 # ("OctoPrint-PluginSkeleton"), you may define that here. Same goes for the other metadata derived from setup.py that
