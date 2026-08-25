@@ -132,68 +132,12 @@ $(function () {
             );
         });
 
-        // === POPOVERS ===
-
-        $("#navbar_maintenance_reminder").popover({
-            trigger: "click",
-            placement: "bottom",
-            container: "body",
-            html: true,
-
-            template:
-                '<div class="popover maintenance-popover">' +
-                '<div class="arrow"></div>' +
-                '<h3 class="popover-title"></h3>' +
-                '<div class="popover-content"></div>' +
-                "</div>",
-
-            title: "Maintenance Reminder",
-            content: function () {
-                return self.buildPopover();
-            }
-        });
-
-        self.buildPopover = function () {
-            var html = `<table class="table table-striped">
-			         <tbody data-bind="foreach: pluginSettings.reminders">`;
-
-            self.pluginSettings.reminders().forEach(function (r, i) {
-                var percent = self.percentage(r);
-
-                if (self.isAlert(r)) {
-                    html += '<tr class="maintenance-alert maintenance-row">';
-                } else {
-                    html += '<tr class="maintenance-row">';
-                }
-                html += `<td>${r.message()}</td>
-            <td style="text-align:right"><span id='count'>${r.count()}</span> / ${r.interval()} prints
-            <button class="btn btn-mini btn-success reminder-reset" data-index='${i}'>
-              <i class="fa fa-check-square"></i> Mark Complete</button>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <div class="progress">
-					<div class="bar `;
-
-                html += self.barClass(r);
-
-                html += `" style="width:${percent}%">${percent}%</div>
-                </div>
-            </td>
-        </tr>
-        `;
-            });
-
-            $(document).on("click", ".reminder-reset", function (e) {
-                e.preventDefault();
-
-                var index = $(this).data("index");
-                window.maintenanceReminderVM.resetReminderByIndex(index);
-            });
-
-            return html;
-        };
+        $(document).on("click", ".reminder-reset", function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			var index = $(this).data("index"); 
+			window.maintenanceReminderVM.resetReminderByIndex(index);
+		});
     }
 
     OCTOPRINT_VIEWMODELS.push([

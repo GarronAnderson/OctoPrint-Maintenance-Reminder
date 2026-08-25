@@ -2,13 +2,14 @@
     background-color: #f8d7da !important;
 }
 
-.maintenance-popover {
-    max-width: 500px;
+.maintenance-dropdown {
     width: 500px;
+    min-width: 500px;
+    padding: 10px;
 }
 
-.maintenance-popover .bar {
-    transition: width 1s ease;
+.maintenance-dropdown .bar {
+    transition: width 1s ease !important;
 }
 
 .maintenance-settings .bar {

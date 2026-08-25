@@ -106,7 +106,7 @@ class MaintenanceReminderPlugin(
     def get_template_configs(self):
         return [
             dict(type="settings", custom_bindings=True),
-            dict(type="navbar", custom_bindings=True),
+            dict(type="navbar", custom_bindings=True, classes=["dropdown"]),
             dict(type="generic", template="maintenance_reminder_modal.jinja2")
         ]
         

@@ -13,7 +13,7 @@ I may add support for notifications via ntfy.sh in the future.
 Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/main/bundledplugins/pluginmanager.html)
 or manually using this URL:
 
-    https://github.com/GarronAnderson/OctoPrint-Maintenance-Reminder/archive/main.zip
+    https://github.com/GarronAnderson/OctoPrint-Maintenance-Reminder/archive/master.zip
 
 ## Configuration
 

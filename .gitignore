@@ -7,3 +7,21 @@ dist
 *.egg*
 .DS_Store
 *.zip
+
+# Swap files
+*.swp
+*.swo
+*.swn
+*.sw?
+
+# Backup files
+*~
+
+# Persistent undo history
+*.un~
+
+# Vim sessions
+Session.vim
+
+# Netrw directory listing history
+.netrwhist
